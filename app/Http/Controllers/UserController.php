@@ -54,7 +54,7 @@ class UserController extends Controller
     {
         try {
             $user = User::findOrFail($id);
-            $user->update($request->validated());
+            $user->update($request->all());
 
             return $this->successResponse('Usuário atualizado com sucesso!', $user);
 
