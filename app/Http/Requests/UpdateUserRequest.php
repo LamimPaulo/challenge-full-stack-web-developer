@@ -24,7 +24,7 @@ class UpdateUserRequest extends FormRequest
      */
     public function rules()
     {
-        $userId = $this->route('user');
+        $userId = $this->route('id');
 
         return [
             'name' => 'required|string|max:255',
@@ -45,9 +45,9 @@ class UpdateUserRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'The name field is required.',
-            'email.required' => 'The email field is required.',
-            'email.unique' => 'This email is already registered.',
+            'name.required' => 'O campo nome é obrigatório',
+            'email.required' => 'O campo email é obrigatório.',
+            'email.unique' => 'Email já em uso.',
         ];
     }
 }
