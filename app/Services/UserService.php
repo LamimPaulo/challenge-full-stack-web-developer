@@ -2,39 +2,44 @@
 
 namespace App\Services;
 
+use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UserService
 {
+    protected $userRepository;
+
+    public function __construct(UserRepositoryInterface $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
     public function listUsers()
     {
-        return User::paginate(10);
+        return $this->userRepository->paginate(10);
     }
 
     public function getUserById($id)
     {
-        return User::findOrFail($id);
+        return $this->userRepository->findOrFail($id);
     }
 
     public function createUser(array $data)
     {
-        return User::create($data);
+        return $this->userRepository->create($data);
     }
 
     public function updateUser($id, array $data)
     {
-        $user = User::findOrFail($id);
-        $user->update($data);
-
-        return $user;
+        $user = $this->userRepository->findOrFail($id);
+        return $this->userRepository->update($user, $data);
     }
 
     public function deleteUser($id)
     {
-        $user = User::findOrFail($id);
-        $user->delete();
-
+        $user = $this->userRepository->findOrFail($id);
+        $this->userRepository->delete($user);
         return $user;
     }
 }
