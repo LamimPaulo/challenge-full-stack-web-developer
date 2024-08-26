@@ -1,120 +1,95 @@
-Obi Tec - Full Stack Web Developer
-===================
-O objetivo deste desafio é principalmente conhecermos um pouco mais de você que se candidatou para a nossa vaga de desenvolvedor Full Stack Web.
+# Projeto Laravel com Docker e Laravel Sail
 
-É importante ressaltar que solução do desafio não tem um gabarito. Vamos verificar as técnicas que utilizaram para a criação do serviço, como vocês encaram este desafio e também, claro, a entrega da solução.   
+Este documento fornece instruções para clonar e executar este projeto Laravel utilizando Docker e Laravel Sail.
 
-As regras e os requisitos técnicos estão detalhadas abaixo, boa sorte!
+## Pré-requisitos
 
-_Time Obi.Tec_
-# Especificações Técnicas
-- **Front End:** [Vue.js](https://vuejs.org)
-- **UI Framework**:  [Vuetifyjs](https://vuetifyjs.com/en)  ou [Bootstrap](https://bootstrap-vue.org)
-- **API:** NodeJS
-- **Banco de Dados:** PostgreSQL, MySQL ou MongoDB
-- **Idioma de escrita do código:** Inglês
+Certifique-se de ter os seguintes itens instalados em seu sistema:
 
-# Requisitos
-## Contextualização
-Considere que para o módulo de autenticação da **Plataforma Obi Tec oAuth** será desenvolvido um **serviço** para o gerenciamento do **cadastro de usuário**. O desafio consiste em criar uma aplicação para o cadastro de usuários que atenda (mas não se detenha) aos critérios mínimos de aceitação.
+- [Docker](https://www.docker.com/get-started)
+- [Docker Compose](https://docs.docker.com/compose/install/)
 
-## Histórias do Usuário
-- **Sendo** um usuário administrativo da Plataforma Obi Tec oAuth
-- **Quero** gerenciar os usuários da Plataforma
-- **Para** que seja possível configurar acessos aos sistemas dos clientes
+## Execução do Projeto
 
-### Critérios mínimos de aceite: 
-#### Cenário: listar usuários cadastrados 
-- **Dado** que estou na Plataforma Obi Tec oAuth
-- **Quando** clico no menu Usuários
-- **Então** abre a tela de Consulta de Usuários
-- **E** exibe opção Cadastrar ao topo
-- **E** exibe lista dos usuários
-- **E** para cada registro exibe o UUID (identificador único do usuário), Name e E-mail
-- **E** exibe a opção Editar
-- **E** exibe a opção Excluir
+1. **Clone o repositório:**
 
-#### Cenário: cadastrar novo usuário
-- **Dado** que estou na tela de Consulta de Usuários
-- **Quando** clico em Cadastrar
-- **Então** abre a tela de Cadastro do Usuário
-- **E** exibe os campos obrigatórios, UUID, Name e E-mail
-####
-- **Dado** que inseri dados válidos nos campos
-- **Quando** clico em Salvar
-- **Então** cria o novo usuário na base
-- **E** retorna mensagem de sucesso
-####
-- **Dado** que insiro um UUID já cadastrado
-- **Quando** clico em Salvar
-- **Então** é realizado uma validação que o UUID já existe
-- **E** retorna mensagem de erro "UUID já cadastrado"
-####
-- **Dado** que insiro um E-mail já cadastrado
-- **Quando** clico em Salvar
-- **Então** é realizado uma validação que o e-mail já existe
-- **E** retorna mensagem de erro "E-mail já cadastrado"
-####
-- **Dado** que não desejo cadastrar mais o Usuário
-- **Quando** clico em Cancelar
-- **Então** retorna para tela Consulta de Usuários
-- **E** não persiste a gravação dos dados no banco 
+  ```bash
+  git clone https://github.com/LamimPaulo/challenge-full-stack-web-developer
+  cd challenge-full-stack-web-developer
+  ```
 
-#### Cenário editar cadastro de usuário
-- **Dado** que estou na tela de Consulta de Usuários
-- **Quando** clico em Editar Usuários
-- **Então** abre a tela de Edição
-- **E** exibe os campos do cadastro preenchidos
-- **E** habilita alteração dos campos editáveis
-####
-- **Dado** que altero os dados do Usuário
-- **Quando** clica em Salvar
-- **Então** grava os dados editáveis na base
-####
-- **Dado** que estou na tela de Edição
-- **Quando** clica em Cancelar
-- **Então** retorna para a tela de Consulta de Usuários
-- **E** não persiste a gravação dos dados
+2. **Crie um alias para o comando sail:** (opcional)
 
-#### Cenário: excluir cadastro de usuário
-- **Dado** que estou na tela de Consulta de Usuários
-- **Quando** clico em Excluir 
-- **Então** exibe a modal de confirmação de exclusão
-####
-- **Dado** que estou na modal de confirmação de exclusão 
-- **Quando** clico em Confirmar
-- **Então** então exclui o registro do Usuário
-####
-- **Dado** que estou na modal de confirmação de exclusão
-- **Quando** clico em Cancelar
-- **Então** então fecha a modal e não persiste a exclusão
+  Para facilitar o uso, você pode criar um alias para o comando Sail. Adicione o seguinte comando ao seu arquivo ~/.bashrc, ~/.zshrc ou outro arquivo de configuração de shell:
 
-## Campos obrigatórios:
-- **UUID** (não editável)
-- **Nome** (editável)
-- **E-mail** (editável)
+  ```bash
+  alias sail='./vendor/bin/sail'
+  ```
 
-# Desejável
-- Testes unitários
-- Documentação da arquitetura de solução
+3. **Ajuste o arquivo**:
 
-# Critérios de avaliação
-- Qualidade de escrita do código
-- Organização do projeto
-- Qualidade da API
-- Lógica da solução implementada
-- Qualidade da camada de persistência
-- Utilização do Git (quantidade e descrição dos commits, Git Flow, ...)
-- Funcionalidades extras
+  Antes de iniciar os containers, ajuste as configurações do arquivo .env conforme suas necessidades. Copie o arquivo de exemplo .env.example para .env se ainda não tiver um:
 
-# Instruções de entrega
-1. Crie um fork do repositório no seu GitHub
-2. Faça o push do código desenvolvido no seu Github
-3. Inclua um README.md explicando como rodar o projeto
-4. Inclua um arquivo chamado COMMENTS.md explicando
-  - Decisão da arquitetura utilizada
-  - Lista de bibliotecas de terceiros utilizadas
-  - O que você melhoraria se tivesse mais tempo
-  - Quais requisitos obrigatórios que não foram entregues (se houver)
-5. Informe ao recrutador quando concluir o desafio junto com o link do repositório
-6. Após revisão do projeto junto com a equipe de desenvolvimento deixe seu repositório privado
+  ```bash
+  cp .env.example .env
+  ```
+  Edite o arquivo .env com as configurações desejadas.
+
+4. **Inicie os containers Docker**:
+
+  Execute o comando abaixo para iniciar os containers e configurar o ambiente
+  ```bash
+    sail up -d
+  ```
+  isso ira contruir e iniciar os constainers definidos no arquivo `docker-compose.yml`.
+
+5. **Execute as migrations e seeders do banco de dados**:
+
+  Após iniciar os containers, execute o comando para executar as migrations e seeders do banco de dados:
+
+  ```bash
+    sail artisan migrate --seed
+  ```
+
+6. Acesse a aplicação:
+  Por padrão, o Laravel sail expõe sua aplicação na porta 80. Você pode acessar a aplicação no seguinte endereço
+
+  ```bash
+  http://localhost
+  ```
+
+7. **Parar os containers**:
+  Para parar os containers você pode usar o seguinte comando:
+  ```bash
+    sail down
+  ```
+
+
+# Comandos Adicionais
+
+**Executar comandos Artisan:**
+```bash
+sail artisan <comando>
+```
+
+
+**Executar comandos Composer:**
+
+```bash
+sail composer <comando>
+```
+
+
+**Abrir um shell dentro do container:**
+
+```bash
+sail shell
+```
+
+
+# Resolução de Problemas
+**Se você encontrar problemas, verifique o seguinte:**
+
+- Certifique-se de que Docker e Docker Compose estão corretamente instalados e em execução.
+- Verifique se nenhum outro serviço está usando a porta 80 ou qualquer outra porta definida no docker-compose.yml.
+- Em caso de erro de permisão, certifique-se de estar usando o Docker Engine e não o Docker Desktop, onde o mesmo roda os comandos com um usuario destinto ao do sistema.

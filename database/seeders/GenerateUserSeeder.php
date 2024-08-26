@@ -19,6 +19,7 @@ class GenerateUserSeeder extends Seeder
 
         for ($i = 0; $i < 10; $i++) {
             User::create([
+                'id' => \Ramsey\Uuid\Uuid::uuid4(),
                 'name' => $faker->name,
                 'email' => $faker->unique()->safeEmail,
             ]);
