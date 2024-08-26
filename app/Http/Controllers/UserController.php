@@ -20,6 +20,12 @@ class UserController extends Controller
         return $this->successResponse('Success', $users);
     }
 
+    public function show($id)
+    {
+        $user = User::find($id);
+        return $this->successResponse('Usuário Encontrado', $user);
+    }
+
     /**
      * Store a newly created user in the database.
      *
@@ -50,40 +56,22 @@ class UserController extends Controller
             $user = User::findOrFail($id);
             $user->update($request->validated());
 
-            return $this->successResponse('User updated successfully!', $user);
+            return $this->successResponse('Usuário atualizado com sucesso!', $user);
 
         } catch (ModelNotFoundException $e) {
-            return $this->errorResponse('User not found.', Response::HTTP_NOT_FOUND);
+            return $this->errorResponse('Usuário não encontrado.', Response::HTTP_NOT_FOUND);
         }
     }
-
-    /**
-     * Return a success response.
-     *
-     * @param  string  $message
-     * @param  mixed  $data
-     * @param  int  $status
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function successResponse(string $message, $data, int $status = 200)
+    public function delete($id)
     {
-        return response()->json([
-            'message' => $message,
-            'data' => $data
-        ], $status);
-    }
+        try {
+            $user = User::findOrFail($id);
+            $user->delete();
 
-    /**
-     * Return an error response.
-     *
-     * @param  string  $message
-     * @param  int  $status
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function errorResponse(string $message, int $status)
-    {
-        return response()->json([
-            'error' => $message
-        ], $status);
+            return $this->successResponse('Usuário excluido com sucesso!', $user);
+
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse('Usuário não encontrado.', Response::HTTP_NOT_FOUND);
+        }
     }
 }
