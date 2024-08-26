@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
@@ -13,16 +14,21 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UserController extends Controller
 {
+    protected $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
     public function index()
     {
-        $users = User::paginate(10);
-
+        $users = $this->userService->listUsers();
         return $this->successResponse('Success', $users);
     }
 
     public function show($id)
     {
-        $user = User::find($id);
+        $user = $this->userService->getUserById($id);
         return $this->successResponse('Usuário Encontrado', $user);
     }
 
@@ -33,12 +39,12 @@ class UserController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreUserRequest $request)
-    {
-        $user = User::create([
-            'id' => $request->uuid,
-            'name' => $request->name,
-            'email' => $request->email,
-        ]);
+    {   
+        $user = $this->userService->createUser([
+                'id' => $request->uuid,
+                'name' => $request->name,
+                'email' => $request->email,
+            ]);
 
         return $this->successResponse('Usuário criado com sucesso', $user, Response::HTTP_CREATED);
     }
@@ -53,8 +59,7 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, $id)
     {
         try {
-            $user = User::findOrFail($id);
-            $user->update($request->all());
+            $user = $this->userService->updateUser($id, $request->all());
 
             return $this->successResponse('Usuário atualizado com sucesso!', $user);
 
@@ -65,8 +70,7 @@ class UserController extends Controller
     public function delete($id)
     {
         try {
-            $user = User::findOrFail($id);
-            $user->delete();
+            $user = $this->userService->deleteUser($id);
 
             return $this->successResponse('Usuário excluido com sucesso!', $user);
 

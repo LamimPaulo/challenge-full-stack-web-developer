@@ -4,7 +4,6 @@ namespace Tests\Unit;
 
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
-use Ramsey\Uuid\Uuid;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
@@ -12,6 +11,8 @@ use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\App;
+use Ramsey\Uuid\Uuid;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UserControllerTest extends TestCase
 {
@@ -38,7 +39,7 @@ class UserControllerTest extends TestCase
         $userData = [
             'uuid' => $uuid,
             'name' => 'Zé',
-            'email' => 'zé@mailinator.com',
+            'email' => 'ze@mailinator.com',
         ];
 
         $controller = App::make(UserController::class);
@@ -93,5 +94,33 @@ class UserControllerTest extends TestCase
         $this->assertInstanceOf(JsonResponse::class, $response);
         $this->assertEquals(Response::HTTP_OK, $response->status());
         $this->assertDatabaseMissing('users', ['id' => $user->id]);
+    }
+
+    /** @test */
+    public function it_returns_404_when_updating_nonexistent_user()
+    {
+        $updateData = [
+            'name' => 'João',
+            'email' => 'joão@mailinator.com',
+        ];
+
+        $controller = App::make(UserController::class);
+        $request = new UpdateUserRequest($updateData);
+        $response = $controller->update($request, 'nonexistent-id');
+
+        $this->assertInstanceOf(JsonResponse::class, $response);
+        $this->assertEquals(Response::HTTP_NOT_FOUND, $response->status());
+        $this->assertJson($response->getContent());
+    }
+
+    /** @test */
+    public function it_returns_404_when_deleting_nonexistent_user()
+    {
+        $controller = App::make(UserController::class);
+        $response = $controller->delete('nonexistent-id');
+
+        $this->assertInstanceOf(JsonResponse::class, $response);
+        $this->assertEquals(Response::HTTP_NOT_FOUND, $response->status());
+        $this->assertJson($response->getContent());
     }
 }
